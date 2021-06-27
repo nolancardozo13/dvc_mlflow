@@ -1,0 +1,4 @@
+[core]
+    remote = data_store
+['remote "data_store"']
+    url = /tmp/data
