@@ -189,10 +189,20 @@ The mlflow UI is an interactive way of viewing logs in real-time. You can start 
 mlflow ui
 ```
 
-An example of a plot from the ui is shown below:
+A screenshot from the mlflow ui is shown below:
+
+![mlflow_log](images/mlflow_log.PNG)
+
+You can also create interactive plots in mlflow:
 
 ![mlflow_ui](images/mlflow_ui.PNG)
 
+
+
+
+After training is complete, MLflow saves the model in a folder called "model" in the working directory with additional metadata about the model which helps in model tracking and versioning.
+
+The model can further be served into production by using the "torchserve" functionality of mlflow.
 
 
 
