@@ -114,6 +114,11 @@ dvc push
 git push 
 ```
 
+Note: The tags have to be pushed separately to git. This can be done by running
+
+```
+git push --tags
+```
 Now we can delete dataset from our local folder since it is tracked by dvc. 
 Note: Do not remove the dataset.dvc file as this file contains the link between git and dvc 
 
@@ -147,49 +152,46 @@ Now you can run ```git log``` to check the difference versions of the dataset in
 
 ![git_log2](images/git_log2.png)
 
-Once verified, we can now push the changes to dvc remote and guthub:
+Once verified, we can now push the changes to dvc remote and guthub. We also need to push the tags.
 
 ```
 dvc push
 git push 
+git push --tags
+```
+
+In a typical Machine learning workflow, the dataset goes through a series of transformation. If we want to access the previous versions to the dataset we have to just checkout to that version. For example if we want to change to version "dv1", we can run.
+
+```
+git checkout dv1
+dvc checkout
 ```
 
 # MLflow
 
-Now we will use a particular version of our dataset to train the model and track training parameters, metrics, artifacts and models using MLflow.
+Now we will train our split dataset and track parameters, metrics, artifacts and models using MLflow.
 
-All we need to do is point the trining script to the location that the dataset is stored. To do this, we include the following code in the training script:
+The "MLproject" file contains the entrypoints for the code to start running. In our case, it is the train.py file. We use a conda environment specified in the "conda.yaml" that installs all dependencies and is directly passed to the "MLproject" file as an argument.
 
-```
-import dvc
-data_url = dvc.api.get_url(
-        path = <path in repo>,
-        repo = <repo>,
-        rev = <version>
-    )
-```
-
-We can pass this ```data_url``` to the custom dataset class in pytorch and the integration is complete. Please look at the "train.py" file to get a clear idea about how the integration is done.
-
-In this example, we use a docker environment to build and run the MLflow project. To build the docker container run the following:
+Now the training script and MLflow tracking can be run with the following command:
 
 ```
-docker build -t dvc_mlflow .
+mlflow run . -P data_path="dataset"
 ```
 
-Now that the docker image is built, you can start training the model by running the following command:
-
-```
-mlflow run . -P data_version="dv2" -P data_path="dataset" -A  gpus=all
-```
-
-The paramters are passed after the -P option. To see all the parameters that the command takes, please view the 'MLproject.yaml' manifest file. The arguments to the docker run can be specified with a -A option. In this case we specify "gpus = all" to run the training all all available gpus.
+The paramters are passed after the -P option. To see all the parameters that the command takes, please view the 'MLproject.yaml' or the "train.py" file. 
 
 When the mlflow tracking starts, a folder names 'mlruns' will be created which logs all the metrics, parameters and artifacts on the local system. You can also log to remote server or cloud by setting up a tracking server on AWS or on premise at your company.
 
+The mlflow UI is an interactive way of viewing logs in real-time. You can start the ui by running:
 
+```
+mlflow ui
+```
 
+An example of a plot from the ui is shown below:
 
+![mlflow_ui](images/mlflow_ui.PNG)
 
 
 

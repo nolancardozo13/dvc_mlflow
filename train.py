@@ -168,8 +168,6 @@ def train_model(model, dataloaders, optimizer, lr_scheduler, model_path, imp_wei
                 # save model
                 if phase == 'val' and kappa > best_kappa:
                     best_kappa = kappa
-                    if not os.path.isdir('model'):
-                        os.mkdir('model')
                     scripted_model = torch.jit.script(model)
         mlflow.pytorch.save_model(scripted_model, model_path)
 
@@ -185,22 +183,13 @@ if __name__ == "__main__":
     parser.add_argument("--lr", default = 0.000001, type = float, help = "The learning rate to start with when training")
     parser.add_argument("--weight_decay", default = 0.01, type = float, help = "The weight decay to use for regularization")
     parser.add_argument("--pre_trained" , default = True, type = bool , help = "The number of epochs to be used when training")
-    parser.add_argument("--data_version", type = str, help = "The version of the dataset to be used")
     parser.add_argument("--data_path", type = str, help = "The path of the dataset in the repository")
-    parser.add_argument("--repo", type = str, help = "The path to the dataset repository or git repository")
     parser.add_argument("--model_path", default = "model", type = str, help = "The path to save the model")
     args = parser.parse_args()
 
-    data_url = dvc.api.get_url(
-        path = args.data_path,
-        repo = args.repo,
-        rev = args.data_version
-    )
 
-    print(data_url)
-
-    train_dataset = BlindnessDataset(data_path = data_url, num_classes = args.num_classes, phase = 'train')
-    val_dataset = BlindnessDataset(data_path = data_url, num_classes = args.num_classes, phase = 'val')
+    train_dataset = BlindnessDataset(data_path = args.data_path, num_classes = args.num_classes, phase = 'train')
+    val_dataset = BlindnessDataset(data_path = args.data_path, num_classes = args.num_classes, phase = 'val')
     train_loader = DataLoader(train_dataset, batch_size = args.batch_size, shuffle = True)
     val_loader = DataLoader(val_dataset, batch_size = args.batch_size)
     data_loaders = {'train': train_loader, 'val': val_loader}

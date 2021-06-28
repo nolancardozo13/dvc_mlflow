@@ -5,9 +5,7 @@ conda_env: conda.yaml
 entry_points:
   main:
     parameters:
-      data_version: {type: str}
       data_path: {type: str}
-      repo: {type: str}
       num_classes: {type: int, default: 5}
       batch_size: {type: int, default: 16}
       epochs: {type: int , default: 10}
@@ -15,4 +13,4 @@ entry_points:
       weight_decay: {type: float, default: 0.01}
       pre_trained: {type: bool, default: True}
       model_path: {type:str, default: "model"}
-    command: "python train.py  --data_version {data_version} --data_path {data_path} --repo {repo} --num_classes {num_classes} --batch_size {batch_size} --epochs {epochs} --lr {lr} --weight_decay {weight_decay} --pre_trained {pre_trained} --model_path  {model_path}"
+    command: "python train.py  --data_path {data_path} --num_classes {num_classes} --batch_size {batch_size} --epochs {epochs} --lr {lr} --weight_decay {weight_decay} --pre_trained {pre_trained} --model_path  {model_path}"
