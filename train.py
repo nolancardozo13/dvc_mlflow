@@ -13,7 +13,7 @@ import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
 from torchvision import models
 import torchvision.transforms as transforms
-import dvc
+import dvc.api
 
 
 class BlindnessDataset(Dataset):
@@ -185,9 +185,9 @@ if __name__ == "__main__":
     parser.add_argument("--lr", default = 0.000001, type = float, help = "The learning rate to start with when training")
     parser.add_argument("--weight_decay", default = 0.01, type = float, help = "The weight decay to use for regularization")
     parser.add_argument("--pre_trained" , default = True, type = bool , help = "The number of epochs to be used when training")
-    parser.add_argument("--data_verison", deafult = None, type = str, help = "The version of the dataset to be used")
-    parser.add_argument("--data_path", default = "dataset", type = str, help = "The path of the dataset in the repository")
-    parser.add_argument("--repo", default = None, type = str, help = "The path to the dataset repository or git repository")
+    parser.add_argument("--data_version", type = str, help = "The version of the dataset to be used")
+    parser.add_argument("--data_path", type = str, help = "The path of the dataset in the repository")
+    parser.add_argument("--repo", type = str, help = "The path to the dataset repository or git repository")
     parser.add_argument("--model_path", default = "model", type = str, help = "The path to save the model")
     args = parser.parse_args()
 
@@ -196,6 +196,8 @@ if __name__ == "__main__":
         repo = args.repo,
         rev = args.data_version
     )
+
+    print(data_url)
 
     train_dataset = BlindnessDataset(data_path = data_url, num_classes = args.num_classes, phase = 'train')
     val_dataset = BlindnessDataset(data_path = data_url, num_classes = args.num_classes, phase = 'val')

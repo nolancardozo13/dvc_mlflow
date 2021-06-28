@@ -1,0 +1,19 @@
+name: blindness_detection
+channels:
+  - defaults
+  - pytorch
+  - anaconda
+  - conda-forge
+dependencies:
+  - python=3.8.8
+  - pip
+  - pip:
+    - numpy
+    - pandas
+    - sklearn
+    - mlflow
+    - pillow
+    - argparse
+    - dvc
+    - torch==1.8.1
+    - torchvision==0.9.1

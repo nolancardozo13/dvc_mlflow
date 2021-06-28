@@ -1,0 +1,6 @@
+numpy
+pandas
+mlflow
+pillow
+argparse
+dvc
