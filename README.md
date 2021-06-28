@@ -191,7 +191,7 @@ mlflow ui
 
 A screenshot from the mlflow ui is shown below:
 
-![mlflow_log](images/mlflow_log.PNG)
+![mlflow_log](images/mlflow_log.png)
 
 You can also create interactive plots in mlflow:
 
